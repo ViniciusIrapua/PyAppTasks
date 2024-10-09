@@ -1,7 +1,49 @@
 {% extends '_model.html' %}
 
 {% block content %}
+<link rel="stylesheet" href="/static/css/home.css">
+<h3>Lista de Tarefas</h3>
 
-Home funciona!
+{% if page.action == 'del' %}
+<p>Tarefa apagada!</p>
+{% elif page.action == 'com' %}
+<p>Tarefa concluída!</p>
+{% elif page.action == 'pen' %}
+<p>Tarefa pendente!</p>
+{% endif %}
+
+<table>
+    <tr>
+        <th>Nome</th>
+        <th>Expira</th>
+        <th>Ações</th>
+    </tr>
+    <tr>
+        <td colspan="3"><hr></td>
+    </tr>
+
+    {% for task in page.tasks %}
+    <tr>
+        <td>{{ task.name }}</td>
+        <td>{{ task.expire }}</td>
+        <td>
+            <small>
+                {% if task.status == 'pending' %}
+                <button title="Marcar como concluída" onclick="location.href='/check/{{ task.id }}'">&#x2713;</button>
+                {% else %}
+                <button title="Marcar como pendente" onclick="location.href='/uncheck/{{ task.id }}'">&#10006;</button>
+                {% endif %}
+                <button title="Apagar" onclick="location.href='/del/{{ task.id }}'">&#128465;</button>
+            </small>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3">{{ task.description }}</td>
+    </tr>
+    <tr>
+        <td colspan="3"><hr></td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}
